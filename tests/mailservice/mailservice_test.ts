@@ -1,37 +1,27 @@
 
-import MailService from '../../service/mailService';
+import MailService from '../../service/MailService';
+import Mail from "nodemailer/lib/mailer";
+//jest.mock('../../service/IMailTransport');
 
 describe('My Test Suite', () => {
 
-   it('My Test Case', () => {
-     
-     let config = {
-        host : "",
-        password : "",
-        username : "", 
-        secure : false,
-        port : 22
-     };
+   let fakeMailTransport = {
+      sendMailAsync: jest.fn((options : Mail.Options):Promise<boolean> => Promise.resolve(false))
+   };
 
-     let mailContent = {
-        title : "",
-        subject : "", 
-        content : "", 
-        recipient : ["jeremy@hotmail.com"]
-     }
+   it('sendMailAsync successful', async () => {
 
-     let target = new MailService(config);
-     target.sendMailAsync(mailContent);
+      let mailContent = {
+         title: "",
+         subject: "",
+         content: "",
+         recipient: ["jeremy@hotmail.com"]
+      }
 
+      let target = new MailService(fakeMailTransport);
+      var result = await target.sendMailAsync(mailContent);
+      console.log(result);
+      expect(fakeMailTransport.sendMailAsync.mock.calls.length).toEqual(1);
 
-  });
-
-  it('My Test Case', () => {
-    expect(true).toEqual(true);
-
-    //let mock = jest.mock({});
-    //console.log(mock);
-
-    expect(true).toEqual(true);
-});
+   });
 });

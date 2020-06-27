@@ -31,8 +31,7 @@ export default class CoreMailTransporter implements IMailTransport {
         });
     }
 
-
-    async sendMailAsync(mailContent: MailContent): Promise<void> {
+    async sendMailAsync(mailContent: MailContent): Promise<any> {
 
         return this.transporter.sendMail({
             from: '"jeremy" <foo@example.com>',

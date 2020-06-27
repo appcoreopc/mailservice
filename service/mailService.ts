@@ -11,7 +11,7 @@ class MailService implements IMailService {
     }
 
     public async sendMailAsync(mailContent: MailContent): Promise<boolean> {
-        this.mailTransport.sendMailAsync(mailContent);
+        return this.mailTransport.sendMailAsync(mailContent);
 
         // let testAccount = await nodemailer.createTestAccount();
         // this.smtpConfig.username = testAccount.user;
@@ -39,7 +39,7 @@ class MailService implements IMailService {
 
         //winston.info("Message sent: %s", info.messageId);
 
-        return true;
+        //return true;
     }
 }
 
