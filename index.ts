@@ -5,7 +5,8 @@ import nodemailer = require("nodemailer");
 
 import { Request, Response, NextFunction } from 'express';
 import MailSubjectModel from './model/mailcontent';
-import MailService, { CoreMailTransporter } from './service/mailService';
+import MailService from './service/mailService';
+import CoreMailTransporter from "./service/CoreMailTransporter";
 
 const app = express()
 const port = 3000
