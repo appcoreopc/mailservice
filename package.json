@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --detectOpenHandles --colors --config ./jest.config.json"
   },
   "repository": {
     "type": "git",
@@ -24,5 +24,13 @@
     "express": "^4.17.1",
     "nodemailer": "^6.4.10",
     "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@babel/preset-typescript": "^7.10.1",
+    "@types/jest": "^26.0.3",
+    "jest": "^26.1.0",
+    "jest-junit": "^11.0.1",
+    "ts-jest": "^26.1.1",
+    "typescript": "^3.9.5"
   }
 }

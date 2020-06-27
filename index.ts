@@ -15,7 +15,7 @@ var smtpConfig = {
     username : "jeremy", 
     password : "password", 
     host : "smtp.ethereal.email", 
-    secure : true, 
+    secure : false, 
     port : 587
  };
 
