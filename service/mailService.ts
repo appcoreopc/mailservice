@@ -1,3 +1,4 @@
+import winston = require('winston');
 import nodemailer = require("nodemailer");
 import MailContent from '../model/mailcontent';
 import { SmtpServiceConfig } from "./SmtpServiceConfig";
@@ -15,18 +16,20 @@ class MailService implements IMailService
     public async sendMailAsync(mailContent: MailContent): Promise<boolean> 
     {
         let testAccount = await nodemailer.createTestAccount();
-  
+        this.smtpConfig.username = testAccount.user;
+        this.smtpConfig.password = testAccount.pass;
+
         let transporter = nodemailer.createTransport({
             host: this.smtpConfig.host,
             port: this.smtpConfig.port,
-            secure: this.smtpConfig.secure, // true for 465, false for other ports
+            secure: this.smtpConfig.secure, 
             auth: {
-                user: testAccount.user, // generated ethereal user
-                pass: testAccount.pass, // generated ethereal password
+                user: this.smtpConfig.username, 
+                pass: this.smtpConfig.password, 
             },
         });
 
-        console.log("setup smtp configuration and sending email" + testAccount.user);
+        winston.info("setup smtp configuration and sending email" + testAccount.user);
 
         let info = await transporter.sendMail({
                 from: '"jeremy" <foo@example.com>', // sender address
@@ -36,8 +39,9 @@ class MailService implements IMailService
                 html: mailContent.content, // html body
             });
 
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-        console.log("Message sent: %s", info.messageId);
+            winston.info("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+            
+            winston.info("Message sent: %s", info.messageId);
         return true;
     }
 }

@@ -1,6 +1,9 @@
 import express = require('express');
-import { Request, Response, NextFunction } from 'express';
+import winston = require('winston');
 import bodyParser = require('body-parser');
+import nodemailer = require("nodemailer");
+
+import { Request, Response, NextFunction } from 'express';
 import MailSubjectModel from './model/mailcontent';
 import MailService from './service/mailService';
 
@@ -8,21 +11,24 @@ const app = express()
 const port = 3000
 app.use(bodyParser.json());
 
-app.get('/:id', async(req, res) => 
-{   
-    var params:any = req.params;
-    res.send(`The given id status is as follows.`);
-})
-
 var smtpConfig = {
     username : "jeremy", 
-    password : "passwordjeremy", 
+    password : "password", 
     host : "smtp.ethereal.email", 
     secure : true, 
     port : 587
  };
 
 let mailservice = new MailService(smtpConfig);
+
+app.get('/:id', async(req, res) => 
+{   
+    var params:any = req.params;
+    winston.info('serving up email query :' + params.id);
+    res.setHeader('Content-Type', 'application/json');
+    res.json({ id : params.id });
+})
+
 
 app.post('/send', async ( req: Request, 
     res: Response, next: NextFunction) =>  
@@ -31,9 +37,9 @@ app.post('/send', async ( req: Request,
     var result = await 
     mailservice.sendMailAsync(mailBodyContent);
 
-    console.log("Email request completed.");
+    winston.info("Email request completed.");
     res.send('status' + result);
 })
 
 app.listen(port, 
-    () => console.log(`Mail service started on http://localhost:${port}`))
+    () => winston.info(`Mail service started on http://localhost:${port}`))
