@@ -16,10 +16,11 @@ class MailService implements IMailService
     public async sendMailAsync(mailContent: MailContent): Promise<boolean> 
     {
         let testAccount = await nodemailer.createTestAccount();
+
         this.smtpConfig.username = testAccount.user;
         this.smtpConfig.password = testAccount.pass;
 
-        let transporter = nodemailer.createTransport({
+        let transporter = await nodemailer.createTransport({
             host: this.smtpConfig.host,
             port: this.smtpConfig.port,
             secure: this.smtpConfig.secure, 
@@ -39,9 +40,10 @@ class MailService implements IMailService
                 html: mailContent.content, // html body
             });
 
-            winston.info("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+           winston.info("Preview URL: %s", nodemailer.getTestMessageUrl(info));
             
-            winston.info("Message sent: %s", info.messageId);
+           winston.info("Message sent: %s", info.messageId);
+
         return true;
     }
 }
