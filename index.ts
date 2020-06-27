@@ -14,24 +14,24 @@ app.get('/:id', async(req, res) =>
     res.send(`The given id status is as follows.`);
 })
 
-app.post('/send', async(req: Request, res: Response, next: NextFunction) =>  
+var smtpConfig = {
+    username : "jeremy", 
+    password : "passwordjeremy", 
+    host : "smtp.ethereal.email", 
+    secure : true, 
+    port : 587
+ };
+
+let mailservice = new MailService(smtpConfig);
+
+app.post('/send', async ( req: Request, 
+    res: Response, next: NextFunction) =>  
 { 
-    debugger; 
+    var mailBodyContent : MailSubjectModel = req.body;
+    var result = await 
+    mailservice.sendMailAsync(mailBodyContent);
 
-    var mailBodyContent:MailSubjectModel = req.body;
-    console.log(mailBodyContent.title);
-
-    var smtpConfig = {
-       username : "jeremy", 
-       password : "passwordjeremy", 
-       host : "smtp.ethereal.email", 
-       secure : true, 
-       port : 587
-    };
-
-    let mailservice = new MailService(smtpConfig);
-    var result = await mailservice.sendMailAsync(mailBodyContent);
-
+    console.log("Email request completed.");
     res.send('status' + result);
 })
 

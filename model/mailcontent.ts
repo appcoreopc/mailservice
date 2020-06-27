@@ -1,12 +1,12 @@
 interface MailContent { 
     
-    title : String;
+    title : string;
     
-    recipient : String[];
+    recipient : string[];
 
-    subject : String;
+    subject : string;
 
-    content : String; 
+    content : string; 
 }
 
 export default MailContent;
