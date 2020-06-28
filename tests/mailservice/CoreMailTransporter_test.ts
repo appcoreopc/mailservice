@@ -1,11 +1,9 @@
-
 import MailService from '../../service/MailService';
 import Mail from "nodemailer/lib/mailer";
 import nodemailer = require("nodemailer");
 import CoreMailTransporter from '../../service/CoreMailTransporter';
 import { SmtpConfig } from '../../service/SmtpServiceConfig';
 import SMTPTransport = require('nodemailer/lib/smtp-transport');
-//const nodemailer = require("nodemailer");
 
 jest.mock('nodemailer');
 
@@ -15,27 +13,25 @@ describe('CoreMailTransporter Test Suite', () => {
 
     });
 
-    it('setup ok ', async () => {
+    it('setup is successful', async () => {
 
-
-        var ta = {
-            user: "string",
-            pass: "string",
-            smtp: { host: "string", port: 90, secure: true },
+        var transport = {
+            user: "fakeuser",
+            pass: "fakepassword",
+            smtp: { host: "stmp-relay.google.com", port: 90, secure: true },
             imap: { host: "string", port: 90, secure: true },
             pop3: { host: "string", port: 90, secure: true },
-            web: "string"
+            web: "http://"
         }
 
-        let mockCreateTestAccount = jest.fn().mockResolvedValue(Promise.resolve(ta));
+        let mailTransport = new SMTPTransport("stmp-relay.google.com");
+        let mailInstance = new Mail(mailTransport);
+        
+        let mockCreateTransport = jest.fn().mockReturnValue(mailInstance);
+        let mockCreateTestAccount = jest.fn().mockResolvedValue(Promise.resolve(transport));
 
-        let tra = new SMTPTransport("");
-        let m = new Mail(tra);
-
-        let mockCreateTransport = jest.fn().mockReturnValue(m);
-
-        nodemailer.createTestAccount = mockCreateTestAccount;
         nodemailer.createTransport = mockCreateTransport;
+        nodemailer.createTestAccount = mockCreateTestAccount;
 
         let cfg = {
             host: "",
@@ -46,13 +42,8 @@ describe('CoreMailTransporter Test Suite', () => {
         }
 
         let ms = new CoreMailTransporter(cfg);
-        ms.setup();
-
-        console.log(mockCreateTestAccount.mock.calls.length);
-        console.log(mockCreateTransport.mock.calls.length);
-
-        //expect(nodemailer)
-        //expect(sendMailMock).not.toHaveBeenCalled();
-
+        await ms.setupAsync();
+        expect(mockCreateTestAccount).toHaveBeenCalled();
     });
+    
 });

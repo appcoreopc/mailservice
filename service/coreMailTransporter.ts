@@ -13,7 +13,7 @@ export default class CoreMailTransporter implements IMailTransport {
         this.smtpConfig = smtpConfig;
     }
 
-    public async setup(): Promise<any> {
+    public async setupAsync(): Promise<any> {
 
         let testAccount = await nodemailer.createTestAccount();
 
