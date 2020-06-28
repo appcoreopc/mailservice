@@ -21,7 +21,7 @@ var smtpConfig = {
 };
 
 let transporter = new CoreMailTransporter(smtpConfig);
-transporter.setup();
+transporter.setupAsync();
 let mailservice = new MailService(transporter);
 
 app.get('/:id', async (req, res) => {
