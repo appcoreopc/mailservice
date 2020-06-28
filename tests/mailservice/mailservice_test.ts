@@ -3,13 +3,13 @@ import MailService from '../../service/MailService';
 import Mail from "nodemailer/lib/mailer";
 //jest.mock('../../service/IMailTransport');
 
-describe('My Test Suite', () => {
+describe('MailService Test Suite', () => {
 
    let fakeMailTransport = {
       sendMailAsync: jest.fn((options : Mail.Options):Promise<boolean> => Promise.resolve(false))
    };
 
-   it('sendMailAsync successful', async () => {
+   it('when sendMailAsync() gets called, mail are sent out', async () => {
 
       let mailContent = {
          title: "",
